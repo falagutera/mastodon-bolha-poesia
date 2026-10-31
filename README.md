@@ -8,22 +8,50 @@ It's a rewrite in Go of [Mastopoet](https://github.com/raikasdev/mastopoet) by R
 
 ## Install
 
-You need Docker. There is no database and nothing to register.
+You need Docker. There is no database and nothing to register, and the image is ready to pull.
 
-    cp .env.example .env   # instance and address of this app
-    docker compose up -d
+1. Create a folder with these two files.
 
-Then point your reverse proxy at `127.0.0.1:8080`. Run a single replica: media links are signed with a key made at startup.
+   `.env`:
 
-### Prebuilt image
+   ```ini
+   POET_INSTANCE=https://example.social
+   POET_BASE_URL=https://poet.example.social
+   ```
 
-Every release is published, so you don't need to build it. In `docker-compose.yml`, replace the `build` and `image` lines with:
+   `docker-compose.yml`:
 
-```yaml
-image: registry.gutocarvalho.net/open/poet:latest
-```
+   ```yaml
+   services:
+     poet:
+       image: registry.gutocarvalho.net/open/poet:latest
+       container_name: poet
+       restart: unless-stopped
+       env_file: .env
+       read_only: true
+       cap_drop: [ALL]
+       security_opt: ["no-new-privileges:true"]
+       mem_limit: 128m
+       ports:
+         - "127.0.0.1:8080:8080"
+   ```
 
-For a fixed version, use a tag such as `0.1.2-798`.
+2. Start it: `docker compose up -d`.
+
+3. Point your reverse proxy at `127.0.0.1:8080`. Run a single replica: media links are signed with a key made at startup.
+
+To update: `docker compose pull && docker compose up -d`. For a fixed version, swap `latest` for a tag such as `0.1.2-798`.
+
+To build it yourself instead, clone this repository, copy `.env.example` to `.env` and run `docker compose up -d --build`.
+
+### Settings
+
+| Variable | Required | Default | What it is |
+|---|---|---|---|
+| `POET_INSTANCE` | yes |  | Your instance. Only its posts can be turned into images. |
+| `POET_BASE_URL` | yes |  | Where this app is served. Its name goes in the corner of the image. |
+| `POET_LANG` | no | `en` | `en` or `pt`, when the browser asks for neither. |
+| `POET_LISTEN` | no | `:8080` | Address inside the container. |
 
 ## How it works
 

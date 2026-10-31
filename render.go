@@ -18,8 +18,12 @@ var postPolicy = func() *bluemonday.Policy {
 	p := bluemonday.NewPolicy()
 	p.AllowElements("p", "br", "strong", "b", "em", "i", "u", "s", "del", "code", "pre",
 		"blockquote", "ul", "ol", "li", "h1", "h2", "h3", "h4", "h5", "h6")
+	p.AllowAttrs("href").OnElements("a")
+	p.AllowURLSchemes("http", "https")
+	p.RequireParseableURLs(true)
+	p.RequireNoReferrerOnLinks(true)
 	p.AllowAttrs("class").Matching(regexp.MustCompile(`^(invisible|ellipsis)$`)).OnElements("span")
-	p.AllowElements("a", "span")
+	p.AllowElements("span")
 	return p
 }()
 
@@ -29,8 +33,7 @@ var (
 	blockEndRe  = regexp.MustCompile(`(?i)</p>|<br\s*/?>`)
 )
 
-// sanitize cleans a post's HTML and turns custom emoji into images. Links stay
-// as text: this is a picture, there is nothing to click.
+// sanitize cleans a post's HTML and turns custom emoji into images.
 func sanitize(content string, emojis []emoji, proxy func(string) string) template.HTML {
 	clean := postPolicy.Sanitize(content)
 	for _, e := range emojis {

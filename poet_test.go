@@ -59,10 +59,13 @@ func TestPlainText(t *testing.T) {
 func TestSanitize(t *testing.T) {
 	proxy := func(u string) string { return "/m?" + u }
 	got := string(sanitize(`<p onclick="x()">oi<script>alert(1)</script><a href="javascript:alert(1)">a</a><img src="https://x/y" onerror="z()"><iframe></iframe><span class="invisible">v</span></p>`, nil, proxy))
-	for _, bad := range []string{"onclick", "<script", "alert(1)", "javascript:", "onerror", "<iframe", "<img", "href"} {
+	for _, bad := range []string{"onclick", "<script", "alert(1)", "javascript:", "onerror", "<iframe", "<img"} {
 		if strings.Contains(got, bad) {
 			t.Errorf("%q survived: %s", bad, got)
 		}
+	}
+	if got := string(sanitize(`<a href="https://ok.example">x</a>`, nil, proxy)); !strings.Contains(got, `href="https://ok.example"`) {
+		t.Fatal(got)
 	}
 	got = string(sanitize("<p>:ok: :bad:</p>", []emoji{{"ok", "https://x/o.png"}, {"bad", "javascript:alert(1)"}, {`"><script>`, "https://x/s.png"}}, proxy))
 	if !strings.Contains(got, `src="/m?https://x/o.png"`) || strings.Contains(got, "javascript") || strings.Contains(got, "<script") {

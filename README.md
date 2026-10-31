@@ -15,6 +15,16 @@ You need Docker. There is no database and nothing to register.
 
 Then point your reverse proxy at `127.0.0.1:8080`. Run a single replica: media links are signed with a key made at startup.
 
+### Prebuilt image
+
+Every release is published, so you don't need to build it. In `docker-compose.yml`, replace the `build` and `image` lines with:
+
+```yaml
+image: registry.gutocarvalho.net/open/poet:latest
+```
+
+For a fixed version, use a tag such as `0.1.2-798`.
+
 ## How it works
 
 - Posts come from the instance's public API, as an anonymous visitor would see them, so nothing private can be turned into an image. The HTML is sanitized again here, and the page has a strict CSP.

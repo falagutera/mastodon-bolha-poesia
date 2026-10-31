@@ -9,6 +9,7 @@ import (
 	"html/template"
 	"net/http"
 	"net/http/httptest"
+	"net/netip"
 	"net/url"
 	"os"
 	"strings"
@@ -199,6 +200,7 @@ func TestMediaOnlyServesSignedImages(t *testing.T) {
 		t.Fatalf("forged: %d", resp.StatusCode)
 	}
 	s2 := newServer(s.cfg, s.tmpl, &http.Client{Transport: rewriteToHTTP{}}, s.key)
+	s2.media = s2.client
 	ts2 := httptest.NewServer(s2.routes())
 	defer ts2.Close()
 	t.Setenv("FAKE", is.URL)
@@ -245,5 +247,24 @@ func TestSettingsAreRequired(t *testing.T) {
 	t.Setenv("POET_INSTANCE", "")
 	if _, err := loadConfig(); err == nil || !strings.Contains(err.Error(), "POET_INSTANCE") {
 		t.Fatalf("started without an instance: %v", err)
+	}
+}
+
+func TestMediaClientRefusesPrivateAddresses(t *testing.T) {
+	for _, a := range []string{"127.0.0.1", "10.42.0.1", "192.168.99.30", "169.254.169.254", "100.64.0.1", "::1", "fd00::1", "fe80::1", "::ffff:10.0.0.1", "0.0.0.0"} {
+		if publicAddress(netip.MustParseAddr(a)) {
+			t.Errorf("%s counts as public", a)
+		}
+	}
+	for _, a := range []string{"15.235.51.205", "2606:4700::1"} {
+		if !publicAddress(netip.MustParseAddr(a)) {
+			t.Errorf("%s counts as private", a)
+		}
+	}
+	ts := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
+	defer ts.Close()
+	if resp, err := mediaClient(time.Second).Get(ts.URL); err == nil {
+		resp.Body.Close()
+		t.Fatal("reached a loopback address")
 	}
 }

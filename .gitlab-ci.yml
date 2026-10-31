@@ -4,7 +4,7 @@
 stages: [test, build]
 
 variables:
-  POET_VERSION: "0.1.1"
+  POET_VERSION: "0.1.2"
 
 test:
   stage: test

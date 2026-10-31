@@ -93,6 +93,7 @@ type server struct {
 	cfg    config
 	tmpl   *template.Template
 	client *http.Client
+	media  *http.Client
 	api    *api
 	key    []byte
 	slots  chan struct{}
@@ -102,7 +103,7 @@ type server struct {
 }
 
 func newServer(cfg config, tmpl *template.Template, client *http.Client, key []byte) *server {
-	return &server{cfg: cfg, tmpl: tmpl, client: client, api: &api{base: cfg.instance, client: client}, key: key,
+	return &server{cfg: cfg, tmpl: tmpl, client: client, media: mediaClient(15 * time.Second), api: &api{base: cfg.instance, client: client}, key: key,
 		slots: make(chan struct{}, 16), cache: map[string]cached{}}
 }
 
@@ -175,7 +176,7 @@ func (s *server) handleMedia(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-	resp, err := s.client.Do(req)
+	resp, err := s.media.Do(req)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadGateway), http.StatusBadGateway)
 		return

@@ -1,0 +1,8 @@
+poet is a rewrite in Go of Mastopoet (https://github.com/raikasdev/mastopoet), by Roni Äikäs,
+licensed under the MIT License. This rewrite is licensed under the GNU AGPL 3.0, see LICENSE.
+
+assets/html-to-image.js is html-to-image 1.11.13 (https://github.com/bubkoo/html-to-image), MIT
+License, see assets/html-to-image.LICENSE. It's the unmodified dist file of the npm package,
+SHA-256 a90b42909d80964269ef6d5f3d1e4a5a7e2a4c263a5d2a76a9e7151901343262.
+
+Fonts are IBM Plex, licensed under the SIL Open Font License 1.1 (assets/fonts/OFL.txt).

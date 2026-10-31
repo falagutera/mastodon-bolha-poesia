@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{.T.lang}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>{{.T.title}} · {{.Domain}}</title>
+<link rel="stylesheet" href="/assets/artefatos.css">
+<link rel="stylesheet" href="/assets/poet.css">
+<script src="/assets/html-to-image.js" defer></script>
+<script src="/assets/poet.js" defer></script>
+</head>
+<body>
+<div class="page">
+<div class="topbar">
+  <a class="eyebrow home" href="/">poet · {{.Domain}}</a>
+  <span class="langsel" role="group" aria-label="{{.T.language}}">
+    <a href="/?lang=pt{{if .Post}}&amp;url={{.Post}}{{end}}" hreflang="pt-BR"{{if eq .T.lang "pt-BR"}} class="on" aria-current="true"{{end}}>PT</a>
+    <a href="/?lang=en{{if .Post}}&amp;url={{.Post}}{{end}}" hreflang="en"{{if eq .T.lang "en"}} class="on" aria-current="true"{{end}}>EN</a>
+  </span>
+</div>
+<header class="intro">
+  <h1>{{.T.title}}</h1>
+  <p class="lede">{{printf .T.lede .Domain}}</p>
+</header>
+<form class="address" method="get" action="/">
+  <input type="url" name="url" value="{{.Post}}" required autocomplete="off" spellcheck="false" aria-label="{{.T.url_label}}" placeholder="{{printf .T.url_hint .Domain}}">
+  <input type="hidden" name="theme" value="{{.Options.Theme}}">
+  <input type="hidden" name="bg" value="{{.Options.Background}}">
+  <input type="hidden" name="footer" value="{{.Options.Footer}}">
+  <input type="hidden" name="mark" value="{{.Options.Mark}}">
+  <input type="hidden" name="pad" value="{{.Options.Pad}}">
+  <button type="submit">{{.T.generate}}</button>
+</form>
+{{if .Message}}<p class="error" role="alert">{{.Message}}</p>{{end}}
+{{if .Card}}{{$o := .Options}}
+<form class="opts" method="get" action="/" id="options">
+  <input type="hidden" name="url" value="{{.Post}}">
+  <input type="hidden" name="theme" value="{{.Options.Theme}}">
+  <input type="hidden" name="bg" value="{{.Options.Background}}">
+  <input type="hidden" name="footer" value="{{.Options.Footer}}">
+  <input type="hidden" name="mark" value="{{.Options.Mark}}">
+  <span class="name">{{.T.opt_theme}}</span>
+  <div class="pills">{{range .Themes}}<a href="{{.Href}}"{{if .On}} class="on" aria-current="true"{{end}}>{{.Label}}</a>{{end}}</div>
+  <span class="name">{{.T.opt_bg}}</span>
+  <div class="swatches">{{range .Backdrops}}<a href="{{.Href}}" class="bg-{{.Value}}{{if .On}} on{{end}}" title="{{.Label}}" aria-label="{{.Label}}"{{if .On}} aria-current="true"{{end}}></a>{{end}}</div>
+  <span class="name">{{.T.opt_footer}}</span>
+  <div class="pills">{{range .Footers}}<a href="{{.Href}}"{{if .On}} class="on" aria-current="true"{{end}}>{{.Label}}</a>{{end}}</div>
+  <span class="name">{{.T.opt_mark}}</span>
+  <div class="pills">{{range .Marks}}<a href="{{.Href}}"{{if .On}} class="on" aria-current="true"{{end}}>{{.Label}}</a>{{end}}</div>
+  <label class="name" for="pad">{{.T.opt_pad}}</label>
+  <div class="range"><input type="range" id="pad" name="pad" min="0" max="{{.MaxPad}}" value="{{.Options.Pad}}"><noscript><button class="plain" type="submit">{{.T.apply}}</button></noscript></div>
+</form>
+<div class="stage bg-{{$o.Background}} pad-{{$o.Pad}}" id="stage">
+  <article class="card {{$o.Theme}}">
+    <header class="head">
+      <img src="{{.Card.Avatar}}" alt="" crossorigin="anonymous">
+      <div><b>{{.Card.NameHTML}}</b><span>{{.Card.Handle}}</span></div>
+    </header>
+    {{if .Card.Warning}}<p class="warning">{{.T.warning}} {{.Card.Warning}}</p>{{end}}
+    <div class="text">{{.Card.Body}}</div>
+    {{if .Card.Pictures}}<div class="media n{{len .Card.Pictures}}">{{range .Card.Pictures}}<img src="{{.Src}}" alt="{{.Alt}}">{{end}}</div>{{end}}
+    {{if .Card.Poll}}<div class="poll">{{range .Card.Poll}}<div class="row"><div class="line"><span>{{.Title}}</span><b>{{.Percent}}%</b></div><div class="track"><div class="fill w{{.Bar}}"></div></div></div>{{end}}</div>{{end}}
+    {{if ne $o.Footer "none"}}<footer class="tail">{{if eq $o.Footer "full"}}{{range .Card.Counters}}<span><b>{{.Number}}</b> {{.Label}}</span>{{end}}{{end}}<span class="date">{{.Card.Date}}</span></footer>{{end}}
+  </article>
+  {{if eq $o.Mark "on"}}<span class="mark">{{.Host}}</span>{{end}}
+</div>
+<div class="actions">
+  <button type="button" id="download" data-file="{{.Card.File}}.png" data-error="{{.T.error_capture}}">{{.T.download}}</button>
+  <button type="button" id="download-pdf" data-file="{{.Card.File}}.pdf" data-error="{{.T.error_capture}}">{{.T.download_pdf}}</button>
+  <button type="button" class="plain" id="copy" data-done="{{.T.copied}}">{{.T.copy_alt}}</button>
+</div>
+<p class="error" id="problem" role="alert" hidden></p>
+<details class="alt"><summary>{{.T.alt_title}}</summary><textarea id="alt" readonly rows="6">{{.Card.Alt}}</textarea></details>
+{{end}}
+<footer class="foot">
+  <a href="https://gitlab.gutocarvalho.net/open/poet">{{.T.source}}</a>
+  <a href="https://github.com/raikasdev/mastopoet">{{.T.credit}}</a>
+</footer>
+</div>
+</body>
+</html>

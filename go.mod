@@ -1,4 +1,4 @@
-module gitlab.gutocarvalho.net/open/poet
+module gitlab.gutocarvalho.net/open/bolha/poet
 
 go 1.26.0
 

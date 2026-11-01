@@ -24,7 +24,7 @@ You need Docker. There is no database and nothing to register, and the image is 
    ```yaml
    services:
      poet:
-       image: registry.gutocarvalho.net/open/poet:latest
+       image: registry.gutocarvalho.net/images/poet:latest
        container_name: poet
        restart: unless-stopped
        env_file: .env

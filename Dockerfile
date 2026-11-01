@@ -6,7 +6,8 @@ RUN go mod download
 COPY *.go ./
 COPY templates ./templates
 COPY assets ./assets
-RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /poet .
+ARG VERSION=dev
+RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -X main.version=${VERSION}" -o /poet .
 
 # --- runtime -----------------------------------------------------------------
 # distroless static: no shell, ca-certs + a nonroot user, tiny.

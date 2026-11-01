@@ -194,6 +194,7 @@ func (s *server) handleMedia(w http.ResponseWriter, r *http.Request) {
 }
 
 type pageData struct {
+	Version   string
 	T         map[string]string
 	Domain    string
 	Host      string
@@ -209,7 +210,7 @@ type pageData struct {
 }
 
 func (s *server) page(r *http.Request) pageData {
-	return pageData{T: strs(language(r, s.cfg.lang)), Domain: s.cfg.domain, Host: s.cfg.host, MaxPad: maxPad}
+	return pageData{Version: version, T: strs(language(r, s.cfg.lang)), Domain: s.cfg.domain, Host: s.cfg.host, MaxPad: maxPad}
 }
 
 func (s *server) render(w http.ResponseWriter, status int, data pageData) {

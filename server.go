@@ -19,6 +19,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"gitlab.gutocarvalho.net/open/bolha/poet/internal/relnotes"
 )
 
 const (
@@ -123,6 +125,8 @@ func (s *server) routes() http.Handler {
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServerFS(assets)))
 	mux.HandleFunc("GET /media/{sig}/{target}", s.handleMedia)
 	mux.HandleFunc("GET /{$}", s.handleIndex)
+	mux.HandleFunc("GET /release-notes", s.handleNotes)
+	mux.Handle("GET /release-notes.json", relnotes.JSONHandler("poet", version, releases))
 	return securityHeaders(mux)
 }
 
@@ -194,6 +198,8 @@ func (s *server) handleMedia(w http.ResponseWriter, r *http.Request) {
 }
 
 type pageData struct {
+	Notes     bool          // on the release notes page
+	Releases  template.HTML // release notes
 	Version   string
 	T         map[string]string
 	Domain    string
@@ -211,6 +217,13 @@ type pageData struct {
 
 func (s *server) page(r *http.Request) pageData {
 	return pageData{Version: version, T: strs(language(r, s.cfg.lang)), Domain: s.cfg.domain, Host: s.cfg.host, MaxPad: maxPad}
+}
+
+// handleNotes serves the public release notes page.
+func (s *server) handleNotes(w http.ResponseWriter, r *http.Request) {
+	d := s.page(r)
+	d.Notes, d.Releases = true, relnotes.HTML(releases)
+	s.render(w, http.StatusOK, d)
 }
 
 func (s *server) render(w http.ResponseWriter, status int, data pageData) {

@@ -9,7 +9,7 @@ const langCookie = "__Host-poet-lang"
 
 var translations = map[string]map[string]string{
 	"en": {
-		"lang":              "en",
+		"lang": "en", "nav_notes": "Release notes", "notes_title": "Release notes", "notes_lede": "What changed in each version.",
 		"language":          "Language",
 		"title":             "Poet",
 		"lede":              "Turn a post from %s into a nice image to share.",
@@ -59,7 +59,7 @@ var translations = map[string]map[string]string{
 		"error_capture":     "The image couldn't be generated.",
 	},
 	"pt": {
-		"lang":              "pt-BR",
+		"lang": "pt-BR", "nav_notes": "Novidades", "notes_title": "Novidades", "notes_lede": "O que mudou em cada versão.",
 		"language":          "Idioma",
 		"title":             "Poet",
 		"lede":              "Transforme um post da %s em uma imagem bonita para compartilhar.",

@@ -175,12 +175,12 @@ func (s *server) handleMedia(w http.ResponseWriter, r *http.Request) {
 	case <-r.Context().Done():
 		return
 	}
-	req, err := http.NewRequestWithContext(r.Context(), http.MethodGet, string(target), nil)
+	req, err := http.NewRequestWithContext(r.Context(), http.MethodGet, string(target), nil) // #nosec G704 -- target is HMAC-signed by this server, https only, and the dialer refuses private addresses
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
-	resp, err := s.media.Do(req)
+	resp, err := s.media.Do(req) // #nosec G704 -- signed https target; the media client refuses private addresses
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadGateway), http.StatusBadGateway)
 		return

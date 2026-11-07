@@ -83,11 +83,11 @@ type api struct {
 
 // post reads a post as an anonymous visitor, so only what is public comes back.
 func (a *api) post(ctx context.Context, id string) (*status, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, a.base+"/api/v1/statuses/"+id, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, a.base+"/api/v1/statuses/"+url.PathEscape(id), nil) // #nosec G704 -- a.base is the configured instance; the id is path-escaped
 	if err != nil {
 		return nil, err
 	}
-	resp, err := a.client.Do(req)
+	resp, err := a.client.Do(req) // #nosec G704 -- requests only go to the configured instance; the id is path-escaped
 	if err != nil {
 		return nil, err
 	}

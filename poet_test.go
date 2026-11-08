@@ -133,6 +133,7 @@ func page(id string) string { return "/?url=" + url.QueryEscape("https://bolha.u
 func TestCard(t *testing.T) {
 	_, ts, inst, _ := testServer(t)
 	resp, body := get(t, ts.URL+page("1"))
+	dump(t, "card.html", body)
 	if resp.StatusCode != 200 {
 		t.Fatalf("%d", resp.StatusCode)
 	}

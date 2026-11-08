@@ -19,7 +19,7 @@ go test ./...         # everything runs against a fake instance (fakeInstance in
 ```
 
 There is no database and no test variable. To look at a rendered card:
-`mkdir -p /tmp/poet-dump && POET_DUMP=/tmp/poet-dump go test -run TestCard ./...` writes
+`D=$(mktemp -d) && POET_DUMP=$D go test -run TestCard ./... && echo $D` writes
 `card.html` and `assets/` there (pictures point at `/media` and stay blank; the export buttons need
 the real app). To run it for real: `POET_INSTANCE=https://<instance> POET_BASE_URL=http://localhost:8080 go run .`
 and open `http://localhost:8080/?url=<address of a public post>`.
@@ -35,7 +35,7 @@ and open `http://localhost:8080/?url=<address of a public post>`.
 | `fetch.go` | `mediaClient`: the only client for remote URLs (public addresses only) |
 | `i18n.go` | every text, in `en` and `pt`, including the option labels and month names |
 | `templates/index.html` | the whole page: form, options, the card (`#stage`), alt text |
-| `assets/` | `poet.css` (one class per option value), `poet.js`, `html-to-image.js` (vendored, unmodified), fonts |
+| `assets/` | `poet.css` (the app's own CSS, one class per option value), `poet.js`, `html-to-image.js` (vendored, unmodified), fonts; `artefatos.css` is the shared design stylesheet of our sites (don't edit it here) |
 | `internal/relnotes` | copy of the shared release-notes package (synced from its own repo, never edited here) |
 
 Tests: `poet_test.go` (`fakeInstance` serves post 1 with CW, poll, emoji, media and an insecure
@@ -78,15 +78,28 @@ preview; post 2 is a boost; `/ok.png` and `/bad.svg` for the proxy; `testServer`
    `footers`, `marks`, and `pad` (0..`maxPad`).
 1. Append the value to its list (the first one is the default: do not reorder).
 2. The CSS class in `assets/poet.css` (`.bg-<value>`, `.card.<theme>`, ...), and template markup
-   if it changes what the card shows.
+   if it changes what the card shows. A dark background also needs the light watermark: add
+   `.bg-<value> .mark` to the `.bg-night .mark` selector, or the mark is unreadable.
 3. The label `<key>_<value>` in both languages in `i18n.go`.
-4. A case in `TestOptionsChangeThePage` (the class is on the page, and what must disappear).
-5. `gofmt`, `go vet`, `go test`, and look at the dump. For a new card detail instead: the field
-   in `status`, then `card` in `newCard`, then the template; images only through `proxy`.
+4. A test for the new value with its own request (`TestOptionsChangeThePage` checks one fixed
+   query): the class is on the page, and what must disappear does.
+5. `gofmt`, `go vet`, `go test`, and look at the dump.
+
+## Adding a card detail
+
+1. The field in `status` (`mastodon.go`), then `card` in `newCard` (`render.go`), then the
+   template; HTML only through `sanitize`, images only through `proxy`.
+2. Texts in both languages; the data in `fakeInstance` (post 1) and a check in `TestCard`,
+   including what must not reach the page.
+3. `gofmt`, `go vet`, `go test`, and look at the dump.
 
 ## Releasing
 
-- `VERSION` holds `X.Y.Z`; CI adds the build number (`X.Y.Z-BUILD`). Bump it for user-visible changes.
+- `VERSION` holds `X.Y.Z`; CI adds the build number (`X.Y.Z-BUILD`). Which part to bump: a fix or a
+  small visual tweak is a patch; a new feature, option or detail is a minor; a change that needs a
+  new grant or setting at install is a minor whose changelog entry starts with that step in **bold**;
+  a breaking change is a major; docs, tests or CI only need no bump. Work not released yet can sit
+  under `## Unreleased` in `CHANGELOG.md` (`internal/relnotes` skips that section).
 - Every version needs its `CHANGELOG.md` entry (`TestChangelogHasVersion`); it is also the public
   `/release-notes` page and `/release-notes.json`, so write it for the people who use the site.
 - Code, comments, commits and the README in English. Keep commits small with a message that says why.

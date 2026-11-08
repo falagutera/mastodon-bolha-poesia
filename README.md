@@ -6,6 +6,60 @@ Paste the address of a post, pick a theme, a background, what the footer shows a
 
 It's a rewrite in Go of [Mastopoet](https://github.com/raikasdev/mastopoet) by Roni Äikäs, see `NOTICE`.
 
+## Testing and security
+
+poet takes an address from anyone, fetches a post and its images, and puts the post's HTML on a page. So it is tested against what would hurt: turning a non-public post into an image, being used to fetch other addresses (including internal ones) through its media proxy, and post HTML that could inject markup or script. What is done today (2026-11-08):
+
+**Every pipeline.** GitLab CI ([`.gitlab-ci.yml`](.gitlab-ci.yml), plus the shared security stage from `open/gcn/ci-templates`, file `security.yml`). The test job runs on every pipeline; the security stage runs on every merge request and every push to `main`; the image is built and published only from `main`.
+
+- Blocking (the pipeline fails and no image is published):
+  - `go vet`, a `gofmt` check, and the full test suite (no services needed: the tests use a fake instance);
+  - `govulncheck`: known vulnerabilities in Go code paths poet actually reaches (in the test job and in the security stage);
+  - `gitleaks`: secrets committed to the repository;
+  - `trivy`: critical vulnerabilities that have a fix, secrets and misconfigurations in the repository.
+- Informative (reported, not blocking): `semgrep`, `gosec`, `hadolint` (Dockerfile), `yamllint`, and `poutine` (security of the CI pipeline itself). The `gosec` findings that are false positives are annotated in the code with the reason.
+
+**The test suite.** 16 tests (`go test -list`), running the real HTTP handlers against a fake Mastodon instance. They cover:
+
+- only public posts of the instance: posts are read without a token, non-public ones are "not found", a boost shows the original; accepted addresses are `https` on the instance's exact host, and look-alike hosts, `user@host` tricks, `http` and `..` are refused;
+- the media proxy: it serves only addresses this process signed, only image types (no SVG), and refuses private, loopback, link-local and CGNAT addresses, also after redirects; no remote image reaches the page directly;
+- untrusted HTML: sanitizing, custom emoji replaced only in text, never inside links, the alt text as plain text;
+- options: unknown values fall back to the default, each value changes the page;
+- both languages, required settings, and the release notes.
+
+**Reviews.** A [Strix](https://github.com/usestrix/strix) review found that a custom emoji shortcode inside a link could break out of the link's markup; fixed in 0.1.5 (emoji are now replaced only in text) with a regression test. In 0.1.7 the findings of the updated linters (`gosec`, `semgrep`, `hadolint`) were fixed. These are what we checked; they are not an outside audit and don't certify anything.
+
+**Reporting a vulnerability.** Write to contato@gutocarvalho.net. Please don't open a public issue for it.
+
+## Architecture
+
+**Why it exists.** People share posts as images (on other networks, in slides, in print), and screenshots come out cropped, with the interface around them and no alt text. poet makes a clean card of one public post, with alt text to go with it, from the instance's own address.
+
+**In plain words.**
+
+1. the person pastes the address of a post of the instance;
+2. poet reads the post from the instance's public API as an anonymous visitor, sanitizes its HTML, and draws the card on the server as an HTML page, with the chosen options;
+3. images on the card (avatar, pictures, custom emoji) point to poet's own `/media`, which fetches them from the original server;
+4. on "download", a small script in the browser turns the card into a PNG (or a one-page PDF holding that image). The browser does this step because it renders emoji and every writing system correctly.
+
+**Components.**
+
+```
+          browser  (poet.js + vendored html-to-image: PNG/PDF of the card)
+             |
+       poet (this app, one replica)
+         |              \
+         |               +--> /media proxy --> image servers (https, public addresses only,
+         |                    signed URLs only        image types only, 16 MiB at most)
+         v
+   the Mastodon instance (one only)
+     - public API, no token: the post
+```
+
+- Nothing is stored: no database, no sign-in, no disk. Posts are cached in memory for a minute (at most 256).
+- The media proxy signs each image address with a key made at startup, so only addresses that came from the API are fetched. That key lives only in memory, which is why poet runs as a single replica.
+- The page's CSP lets images load only from poet itself, so the browser never fetches images from other servers.
+
 ## Install
 
 You need Docker. There is no database and nothing to register, and the image is ready to pull.

@@ -106,7 +106,7 @@ preview; post 2 is a boost; `/ok.png` and `/bad.svg` for the proxy; `testServer`
 
 ## Security checks
 
-CI runs `go vet`, the tests and the shared security stage: gitleaks, govulncheck, trivy, gosec,
+CI runs `go vet`, `gofmt -l`, the tests, govulncheck and the shared security stage: gitleaks, govulncheck, trivy, gosec,
 semgrep, poutine, hadolint, shellcheck, yamllint. Before a release that touches `/media`,
 sanitizing or the accepted addresses, also review where a request can go and what a post can put
 on the page — the part scanners do not see.

@@ -249,7 +249,7 @@ func (s *server) handleIndex(w http.ResponseWriter, r *http.Request) {
 		if len(q) > 0 {
 			target += "?" + q.Encode()
 		}
-		http.Redirect(w, r, target, http.StatusSeeOther)
+		http.Redirect(w, r, target, http.StatusSeeOther) // #nosec G710 -- target is "/" plus an encoded query, always this site
 		return
 	}
 	d := s.page(r)

@@ -159,7 +159,7 @@ func TestCard(t *testing.T) {
 func TestOptionsChangeThePage(t *testing.T) {
 	_, ts, _, _ := testServer(t)
 	_, body := get(t, ts.URL+page("1")+"&theme=light&bg=teal&footer=none&mark=off&pad=2")
-	for _, want := range []string{`class="card light"`, "bg-teal pad-2"} {
+	for _, want := range []string{`class="poem light"`, "bg-teal pad-2"} {
 		if !strings.Contains(body, want) {
 			t.Errorf("missing %q", want)
 		}
@@ -235,7 +235,7 @@ func TestLanguage(t *testing.T) {
 	defer resp.Body.Close()
 	var b bytes.Buffer
 	b.ReadFrom(resp.Body)
-	if !strings.Contains(b.String(), `<html lang="en">`) || !strings.Contains(b.String(), "3</b> favourites") {
+	if !strings.Contains(b.String(), `<html lang="en" data-family="bolha">`) || !strings.Contains(b.String(), "3</b> favourites") {
 		t.Fatal("english page")
 	}
 	if r, _ := get(t, ts.URL+"/?lang=en&url=x"); r.StatusCode != 303 || r.Header.Get("Location") != "/?url=x" {

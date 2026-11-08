@@ -5,4 +5,5 @@ assets/html-to-image.js is html-to-image 1.11.13 (https://github.com/bubkoo/html
 License, see assets/html-to-image.LICENSE. It's the unmodified dist file of the npm package,
 SHA-256 a90b42909d80964269ef6d5f3d1e4a5a7e2a4c263a5d2a76a9e7151901343262.
 
-Fonts are IBM Plex, licensed under the SIL Open Font License 1.1 (assets/fonts/OFL.txt).
+The exported card uses IBM Plex fonts (assets/card.css), licensed under the SIL Open Font
+License 1.1 (assets/fonts/OFL.txt). The page itself uses the system fonts.

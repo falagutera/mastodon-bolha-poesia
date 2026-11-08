@@ -1,0 +1,77 @@
+/* poet: the card it exports (everything inside #stage). Its look is part of the image people
+   share, so it keeps its own fonts (IBM Plex, VISUAL.md rule 4 exception, check.sh --card-fonts)
+   and colours, apart from the page's look in style.css. */
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:italic;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-sans-latin-400-italic.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-sans-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Condensed";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-sans-condensed-latin-500-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Condensed";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-sans-condensed-latin-600-normal.woff2") format("woff2")}
+@font-face{font-family:"IBM Plex Sans Condensed";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/ibm-plex-sans-condensed-latin-700-normal.woff2") format("woff2")}
+.stage{--display:"IBM Plex Sans Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;--body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-family:var(--body);font-size:16px;line-height:1.6}
+/* what the card inherited from the old shared stylesheet, kept so the image stays the same,
+   and the page's footer rule kept out of the card's own <footer> */
+.stage p{margin:0}
+.stage img{max-width:100%}
+.stage a{text-underline-offset:2px}
+.stage footer{padding:12px 0 0;font-family:inherit;margin:0}
+.bg-amber { background: linear-gradient(135deg, #FFC72C, #F5763B); }
+.bg-violet { background: linear-gradient(135deg, #7F5AF0, #2CB1FF); }
+.bg-teal { background: linear-gradient(135deg, #12C2A9, #2C7BE5); }
+.bg-pink { background: linear-gradient(135deg, #F15BB5, #7F5AF0); }
+.bg-night { background: linear-gradient(135deg, #2C313B, #14161B); }
+.bg-plain { background: #ECEEF1; }
+.stage { position: relative; margin-top: 24px; border-radius: 14px; display: flex; justify-content: center; }
+.pad-0 { padding: 16px; } .pad-1 { padding: 24px; } .pad-2 { padding: 32px; } .pad-3 { padding: 40px; } .pad-4 { padding: 48px; }
+.pad-5 { padding: 56px; } .pad-6 { padding: 68px; } .pad-7 { padding: 80px; } .pad-8 { padding: 96px; }
+.poem { border: 1px solid #2C313B; --card: #14161B; --card-ink: #ECEEF1; --card-dim: #99A0A9; --card-line: #2C313B; --card-link: #FFC72C; --card-track: #2C313B; background: var(--card); color: var(--card-ink); border-radius: 16px; padding: 26px 28px; width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35); }
+.poem.light { --card: #FFFFFF; --card-ink: #20242B; --card-dim: #6A6F77; --card-line: #E7E4DB; --card-link: #8A6300; --card-track: #E7E4DB; }
+.head { display: flex; flex-direction: row; gap: 14px; align-items: center; padding: 0; }
+.head img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex: none; }
+.head div { min-width: 0; }
+.head b { display: block; font-family: var(--display); font-size: 1.25rem; overflow-wrap: anywhere; }
+.head span { font-family: var(--mono); font-size: 0.78rem; color: var(--card-dim); overflow-wrap: anywhere; }
+.emoji { display: inline; height: 1.2em; width: auto; vertical-align: -0.2em; }
+.warning { font-weight: 600; color: var(--card-link); }
+.text { font-size: 1.1rem; line-height: 1.55; overflow-wrap: anywhere; }
+.text p { margin: 0 0 0.7em; }
+.text p:last-child { margin: 0; }
+.text a, .text .mention { color: var(--card-link); }
+.text .invisible { display: none; }
+.text .ellipsis::after { content: "…"; }
+.media { display: grid; gap: 6px; }
+.media.n2, .media.n3, .media.n4 { grid-template-columns: 1fr 1fr; }
+.media img { width: 100%; max-height: 320px; object-fit: cover; border-radius: 10px; display: block; }
+.poll { display: flex; flex-direction: column; gap: 10px; }
+.line { display: flex; justify-content: space-between; gap: 14px; font-size: 0.95rem; }
+.track { height: 6px; border-radius: 3px; background: var(--card-track); margin-top: 4px; }
+.fill { height: 6px; border-radius: 3px; background: var(--card-link); }
+.w0 { width: 0%; }
+.w5 { width: 5%; }
+.w10 { width: 10%; }
+.w15 { width: 15%; }
+.w20 { width: 20%; }
+.w25 { width: 25%; }
+.w30 { width: 30%; }
+.w35 { width: 35%; }
+.w40 { width: 40%; }
+.w45 { width: 45%; }
+.w50 { width: 50%; }
+.w55 { width: 55%; }
+.w60 { width: 60%; }
+.w65 { width: 65%; }
+.w70 { width: 70%; }
+.w75 { width: 75%; }
+.w80 { width: 80%; }
+.w85 { width: 85%; }
+.w90 { width: 90%; }
+.w95 { width: 95%; }
+.w100 { width: 100%; }
+.tail { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.84rem; color: var(--card-dim); border-top: 1px solid var(--card-line); padding-top: 12px; flex-direction: row; }
+.tail b { color: var(--card-ink); }
+.tail .date { margin-left: auto; font-family: var(--mono); font-size: 0.76rem; }
+.mark { position: absolute; right: 16px; bottom: 10px; font-family: var(--mono); font-size: 0.72rem; font-weight: 600; color: rgba(0, 0, 0, 0.62); }
+.bg-night .mark { color: rgba(255, 255, 255, 0.62); }

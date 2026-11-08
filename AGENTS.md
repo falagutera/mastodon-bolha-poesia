@@ -35,7 +35,7 @@ and open `http://localhost:8080/?url=<address of a public post>`.
 | `fetch.go` | `mediaClient`: the only client for remote URLs (public addresses only) |
 | `i18n.go` | every text, in `en` and `pt`, including the option labels and month names |
 | `templates/index.html` | the whole page: form, options, the card (`#stage`), alt text |
-| `assets/` | `poet.css` (the app's own CSS, one class per option value), `poet.js`, `html-to-image.js` (vendored, unmodified), fonts; `artefatos.css` is the shared design stylesheet of our sites (don't edit it here) |
+| `assets/` | `style.css` (the page's look, a copy from open/gcn/ui: never edit it here), `poet.css` (the page's own rules), `card.css` (the exported card: its own fonts and colours, one class per option value; keep the image identical), `poet.js`, `html-to-image.js` (vendored, unmodified), fonts (the card's only). `check.sh --card-fonts` |
 | `internal/relnotes` | copy of the shared release-notes package (synced from its own repo, never edited here) |
 
 Tests: `poet_test.go` (`fakeInstance` serves post 1 with CW, poll, emoji, media and an insecure

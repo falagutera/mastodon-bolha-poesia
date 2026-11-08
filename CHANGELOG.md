@@ -3,6 +3,11 @@
 All notable changes to poet. Versions follow [SemVer](https://semver.org/); images are
 published as `registry.gutocarvalho.net/images/poet:<version>-<build>`.
 
+## 0.2.0 — 2026-11-08
+
+- **The bolha.io look** for the page, from `open/gcn/ui` (`assets/style.css`, a synced copy, and `VISUAL.md`), like the other bolha apps: light and dark from the system, system fonts, a header with the bubble, "A post as **an image**" as the heading, the card options in a card, pill buttons and the footer "version · source code · part of bolha.io · based on Mastopoet".
+- **The image you download is the same as before**: the card has its own stylesheet (`assets/card.css`) and keeps its IBM Plex fonts and colours, checked pixel by pixel against the previous version.
+
 ## 0.1.7 — 2026-11-07
 
 Hardening from the updated linters.

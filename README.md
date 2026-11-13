@@ -6,6 +6,16 @@ Paste the address of a post, pick a theme, a background, what the footer shows a
 
 It's a rewrite in Go of [Mastopoet](https://github.com/raikasdev/mastopoet) by Roni Äikäs, see `NOTICE`.
 
+## Contents
+
+- [Screenshot](#screenshot)
+- [Testing and security](#testing-and-security)
+- [Architecture](#architecture)
+- [Install](#install)
+- [How it works](#how-it-works)
+- [Updating html-to-image](#updating-html-to-image)
+- [Development](#development)
+
 ## Screenshot
 
 [![poet turning a post into a shareable image](docs/screenshot.png)](https://poet.bolha.us)

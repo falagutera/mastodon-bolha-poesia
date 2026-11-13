@@ -1,7 +1,11 @@
 # Changelog
 
-All notable changes to poet. Versions follow [SemVer](https://semver.org/); images are
+All notable changes to poesia. Versions follow [SemVer](https://semver.org/); images are
 published as `registry.gutocarvalho.net/images/poet:<version>-<build>`.
+
+## 0.3.1 — 2026-11-13
+
+- **The repository is now `open/bolha/poesia`** (the old path `open/bolha/poet` redirects), and the app calls itself poesia in the footer, the release notes and the docs. Settings (`POET_*`), the image (`images/poet`) and the cookies keep their names.
 
 ## 0.3.0 — 2026-11-13
 

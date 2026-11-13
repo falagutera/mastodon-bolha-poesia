@@ -1,4 +1,4 @@
-// poet turns a public post of a Mastodon instance into an image to share. See
+// poesia turns a public post of a Mastodon instance into an image to share. See
 // README.md.
 package main
 
@@ -50,7 +50,7 @@ func loadConfig() (config, error) {
 	c.domain = inst.Host
 	base, err := url.Parse(os.Getenv("POET_BASE_URL"))
 	if err != nil || base.Host == "" {
-		return c, fmt.Errorf("POET_BASE_URL must be a URL like https://poet.example.social")
+		return c, fmt.Errorf("POET_BASE_URL must be a URL like https://poesia.example.social")
 	}
 	c.host = base.Host
 	return c, nil

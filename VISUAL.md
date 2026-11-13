@@ -33,7 +33,7 @@ project's path (`GOAPP_FAMILY`).
    (`:root:root{…}`, `color-scheme: dark` alone). The only exception is generated content (a
    PNG, a card to export), never the page around it.
 4. **System fonts only.** `--sans: system-ui…`, `--mono: ui-monospace…`. No webfonts, no
-   `assets/fonts/`, no `font-src` in the CSP. Exception: an image the app exports (poet's card)
+   `assets/fonts/`, no `font-src` in the CSP. Exception: an image the app exports (poesia's card)
    may carry its own fonts, scoped to that image (`check.sh --card-fonts`); the page around it
    uses the system fonts.
 5. **Never vendor `artefatos.css`.** It is the stylesheet of the artifact pages, not of apps.

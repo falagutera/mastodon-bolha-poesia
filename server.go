@@ -20,7 +20,7 @@ import (
 	"sync"
 	"time"
 
-	"gitlab.gutocarvalho.net/open/bolha/poet/internal/relnotes"
+	"gitlab.gutocarvalho.net/open/bolha/poesia/internal/relnotes"
 )
 
 const (
@@ -126,7 +126,7 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("GET /media/{sig}/{target}", s.handleMedia)
 	mux.HandleFunc("GET /{$}", s.handleIndex)
 	mux.HandleFunc("GET /release-notes", s.handleNotes)
-	mux.Handle("GET /release-notes.json", relnotes.JSONHandler("poet", version, releases))
+	mux.Handle("GET /release-notes.json", relnotes.JSONHandler("poesia", version, releases))
 	return securityHeaders(mux)
 }
 

@@ -1,4 +1,4 @@
-# poet
+# poesia
 
 Turns a public post of a Mastodon instance into an image to share: **poesia.bolha.us** (Poesia; the old address poet.bolha.us redirects there).
 
@@ -18,19 +18,19 @@ It's a rewrite in Go of [Mastopoet](https://github.com/raikasdev/mastopoet) by R
 
 ## Screenshot
 
-[![poet turning a post into a shareable image](docs/screenshot.png)](https://poesia.bolha.us)
+[![poesia turning a post into a shareable image](docs/screenshot.png)](https://poesia.bolha.us)
 
 *A live instance at [poesia.bolha.us](https://poesia.bolha.us): the card options and the generated image, PT/EN.*
 
 ## Testing and security
 
-poet takes an address from anyone, fetches a post and its images, and puts the post's HTML on a page. So it is tested against what would hurt: turning a non-public post into an image, being used to fetch other addresses (including internal ones) through its media proxy, and post HTML that could inject markup or script. What is done today (2026-11-08):
+poesia takes an address from anyone, fetches a post and its images, and puts the post's HTML on a page. So it is tested against what would hurt: turning a non-public post into an image, being used to fetch other addresses (including internal ones) through its media proxy, and post HTML that could inject markup or script. What is done today (2026-11-08):
 
 **Every pipeline.** GitLab CI ([`.gitlab-ci.yml`](.gitlab-ci.yml), plus the shared security stage from `open/gcn/ci-templates`, file `security.yml`). The test job runs on every pipeline; the security stage runs on every merge request and every push to `main`; the image is built and published only from `main`.
 
 - Blocking (the pipeline fails and no image is published):
   - `go vet`, a `gofmt` check, and the full test suite (no services needed: the tests use a fake instance);
-  - `govulncheck`: known vulnerabilities in Go code paths poet actually reaches (in the test job and in the security stage);
+  - `govulncheck`: known vulnerabilities in Go code paths poesia actually reaches (in the test job and in the security stage);
   - `gitleaks`: secrets committed to the repository;
   - `trivy`: critical vulnerabilities that have a fix, secrets and misconfigurations in the repository.
 - Informative (reported, not blocking): `semgrep`, `gosec`, `hadolint` (Dockerfile), `yamllint`, and `poutine` (security of the CI pipeline itself). The `gosec` findings that are false positives are annotated in the code with the reason.
@@ -49,13 +49,13 @@ poet takes an address from anyone, fetches a post and its images, and puts the p
 
 ## Architecture
 
-**Why it exists.** People share posts as images (on other networks, in slides, in print), and screenshots come out cropped, with the interface around them and no alt text. poet makes a clean card of one public post, with alt text to go with it, from the instance's own address.
+**Why it exists.** People share posts as images (on other networks, in slides, in print), and screenshots come out cropped, with the interface around them and no alt text. poesia makes a clean card of one public post, with alt text to go with it, from the instance's own address.
 
 **In plain words.**
 
 1. the person pastes the address of a post of the instance;
-2. poet reads the post from the instance's public API as an anonymous visitor, sanitizes its HTML, and draws the card on the server as an HTML page, with the chosen options;
-3. images on the card (avatar, pictures, custom emoji) point to poet's own `/media`, which fetches them from the original server;
+2. poesia reads the post from the instance's public API as an anonymous visitor, sanitizes its HTML, and draws the card on the server as an HTML page, with the chosen options;
+3. images on the card (avatar, pictures, custom emoji) point to poesia's own `/media`, which fetches them from the original server;
 4. on "download", a small script in the browser turns the card into a PNG (or a one-page PDF holding that image). The browser does this step because it renders emoji and every writing system correctly.
 
 **Components.**
@@ -63,7 +63,7 @@ poet takes an address from anyone, fetches a post and its images, and puts the p
 ```
           browser  (poet.js + vendored html-to-image: PNG/PDF of the card)
              |
-       poet (this app, one replica)
+       poesia (this app, one replica)
          |              \
          |               +--> /media proxy --> image servers (https, public addresses only,
          |                    signed URLs only        image types only, 16 MiB at most)
@@ -73,8 +73,8 @@ poet takes an address from anyone, fetches a post and its images, and puts the p
 ```
 
 - Nothing is stored: no database, no sign-in, no disk. Posts are cached in memory for a minute (at most 256).
-- The media proxy signs each image address with a key made at startup, so only addresses that came from the API are fetched. That key lives only in memory, which is why poet runs as a single replica.
-- The page's CSP lets images load only from poet itself, so the browser never fetches images from other servers.
+- The media proxy signs each image address with a key made at startup, so only addresses that came from the API are fetched. That key lives only in memory, which is why poesia runs as a single replica.
+- The page's CSP lets images load only from poesia itself, so the browser never fetches images from other servers.
 
 ## Install
 
@@ -86,7 +86,7 @@ You need Docker. There is no database and nothing to register, and the image is 
 
    ```ini
    POET_INSTANCE=https://example.social
-   POET_BASE_URL=https://poet.example.social
+   POET_BASE_URL=https://poesia.example.social
    ```
 
    `docker-compose.yml`:

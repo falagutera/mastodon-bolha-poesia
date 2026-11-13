@@ -244,7 +244,7 @@ func TestLanguage(t *testing.T) {
 }
 
 func TestSettingsAreRequired(t *testing.T) {
-	t.Setenv("POET_BASE_URL", "https://poet.example.social")
+	t.Setenv("POET_BASE_URL", "https://poesia.example.social")
 	t.Setenv("POET_INSTANCE", "")
 	if _, err := loadConfig(); err == nil || !strings.Contains(err.Error(), "POET_INSTANCE") {
 		t.Fatalf("started without an instance: %v", err)

@@ -107,7 +107,7 @@ func testServer(t *testing.T) (*server, *httptest.Server, *fakeInstance, *httpte
 	inst := &fakeInstance{}
 	is := httptest.NewServer(inst)
 	t.Cleanup(is.Close)
-	cfg := config{domain: "bolha.us", host: "poet.bolha.us", lang: "pt", instance: is.URL}
+	cfg := config{domain: "bolha.us", host: "poesia.bolha.us", lang: "pt", instance: is.URL}
 	tmpl := template.Must(template.ParseFS(templateFS, "templates/*.html"))
 	s := newServer(cfg, tmpl, &http.Client{Timeout: time.Second}, []byte(strings.Repeat("k", 32)))
 	ts := httptest.NewServer(s.routes())
@@ -137,7 +137,7 @@ func TestCard(t *testing.T) {
 	if resp.StatusCode != 200 {
 		t.Fatalf("%d", resp.StatusCode)
 	}
-	for _, want := range []string{"mundo", "@guto@bolha.us", "cuidado", "75%", "w75", "25%", `<b>3</b> favoritos`, "<b>1</b> impulso", "poet.bolha.us", "poet-guto-1.png", "um gato", `class="emoji"`, "&lt;i&gt;Guto&lt;/i&gt;"} {
+	for _, want := range []string{"mundo", "@guto@bolha.us", "cuidado", "75%", "w75", "25%", `<b>3</b> favoritos`, "<b>1</b> impulso", "poesia.bolha.us", "poesia-guto-1.png", "um gato", `class="emoji"`, "&lt;i&gt;Guto&lt;/i&gt;"} {
 		if !strings.Contains(body, want) {
 			t.Errorf("missing %q", want)
 		}

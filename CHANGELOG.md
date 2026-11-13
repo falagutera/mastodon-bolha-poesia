@@ -3,6 +3,11 @@
 All notable changes to poet. Versions follow [SemVer](https://semver.org/); images are
 published as `registry.gutocarvalho.net/images/poet:<version>-<build>`.
 
+## 0.3.0 — 2026-11-13
+
+- **New address and name: poesia.bolha.us, "Poesia"** (same in PT and EN). The old address poet.bolha.us redirects there.
+- The downloaded file is named `poesia-<user>-<id>`.
+
 ## 0.2.0 — 2026-11-08
 
 - **The bolha.io look** for the page, from `open/gcn/ui` (`assets/style.css`, a synced copy, and `VISUAL.md`), like the other bolha apps: light and dark from the system, system fonts, a header with the bubble, "A post as **an image**" as the heading, the card options in a card, pill buttons and the footer "version · source code · part of bolha.io · based on Mastopoet".

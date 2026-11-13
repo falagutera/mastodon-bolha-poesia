@@ -161,7 +161,7 @@ func newCard(st *status, domain string, t map[string]string, proxy func(string) 
 		Body:     sanitize(st.Content, st.Emojis, proxy),
 		Date:     formatDate(st.CreatedAt, t),
 	}
-	c.File = "poet-" + st.Account.Username + "-" + st.ID
+	c.File = "poesia-" + st.Account.Username + "-" + st.ID
 	alts := []string{}
 	for _, m := range st.Media {
 		if len(c.Pictures) == 4 {

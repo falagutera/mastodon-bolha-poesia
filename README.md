@@ -1,6 +1,6 @@
 # poet
 
-Turns a public post of a Mastodon instance into an image to share: **poet.bolha.us**.
+Turns a public post of a Mastodon instance into an image to share: **poesia.bolha.us** (Poesia; the old address poet.bolha.us redirects there).
 
 Paste the address of a post, pick a theme, a background, what the footer shows and the margin, and download a PNG or a PDF. It also gives you alt text to go with it. The options live in the address, so a preview can be shared as a link: `/?url=<address of the post>`. Only posts of the instance work, including posts from other servers at their local address. To offer it on your instance, run your own.
 
@@ -18,9 +18,9 @@ It's a rewrite in Go of [Mastopoet](https://github.com/raikasdev/mastopoet) by R
 
 ## Screenshot
 
-[![poet turning a post into a shareable image](docs/screenshot.png)](https://poet.bolha.us)
+[![poet turning a post into a shareable image](docs/screenshot.png)](https://poesia.bolha.us)
 
-*A live instance at [poet.bolha.us](https://poet.bolha.us): the card options and the generated image, PT/EN.*
+*A live instance at [poesia.bolha.us](https://poesia.bolha.us): the card options and the generated image, PT/EN.*
 
 ## Testing and security
 

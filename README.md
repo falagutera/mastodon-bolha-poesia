@@ -6,6 +6,12 @@ Paste the address of a post, pick a theme, a background, what the footer shows a
 
 It's a rewrite in Go of [Mastopoet](https://github.com/raikasdev/mastopoet) by Roni Äikäs, see `NOTICE`.
 
+## Screenshot
+
+[![poet turning a post into a shareable image](docs/screenshot.png)](https://poet.bolha.us)
+
+*A live instance at [poet.bolha.us](https://poet.bolha.us): the card options and the generated image, PT/EN.*
+
 ## Testing and security
 
 poet takes an address from anyone, fetches a post and its images, and puts the post's HTML on a page. So it is tested against what would hurt: turning a non-public post into an image, being used to fetch other addresses (including internal ones) through its media proxy, and post HTML that could inject markup or script. What is done today (2026-11-08):
